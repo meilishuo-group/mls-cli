@@ -11,7 +11,7 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 0);
 ini_set('html_errors', 0);
 
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../../../autoload.php');
 
 //读取配置文件
 define('CLI_CONFIG_FILE', __DIR__ . '/../cli-composer-config.json');

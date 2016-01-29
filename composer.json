@@ -1,0 +1,22 @@
+{
+    "name": "jintanlu/mls-cli",
+    "description": "mls command line toolkit",
+    "version": "0.2.0",
+    "license": "GPL2",
+    "authors": [
+        {
+            "name": "LuJintan",
+            "email": "yingxuetan@163.com"
+        }
+    ],
+    "homepage": "https://github.com/lujintan/cli-composer",
+    "require": {
+        "jintanlu/cli-composer": "0.3.0"
+    },
+    "bin": ["bin/mls"],
+    "autoload": {
+        "psr-4": {
+            "cliplugin\\": "plugin/"
+        }
+    }
+}

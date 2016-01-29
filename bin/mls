@@ -1,0 +1,85 @@
+#!/usr/bin/env php
+
+<?php
+
+if (php_sapi_name() != 'cli') {
+    die('必须在命令行中运行');
+}
+
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+ini_set('log_errors', 0);
+ini_set('html_errors', 0);
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+//读取配置文件
+define('CLI_CONFIG_FILE', __DIR__ . '/../cli-composer-config.json');
+if (!file_exists(CLI_CONFIG_FILE)) {
+    die(PHP_EOL .
+        \cli\Colors::colorize('配置文件[%g' . CLI_CONFIG_FILE . '%n]不存在') .
+        PHP_EOL .
+        PHP_EOL);
+}
+$config_str = file_get_contents(CLI_CONFIG_FILE);
+$config     = json_decode($config_str, true) ?: array();
+
+//初始化插件
+$plugins                 = isset($config['plugins']) ? $config['plugins'] : array();
+$plugin_vendor_namespace = isset($config['plugin_vendor_namespace']) ? $config['plugin_vendor_namespace'] : '';
+$plugin_list             = new \clicomposer\PluginList();
+foreach ($plugins as $plugin) {
+    $namespace = $plugin_vendor_namespace;
+    $config    = array();
+    if (is_string($plugin)) {
+        $class_name = $plugin . '\\Main';
+    } elseif (is_array($plugin)) {
+        if (isset($plugin['name']) && !empty($plugin['name'])) {
+            $class_name = $plugin['name'] . '\\Main';
+            if (isset($plugin['vendor_namespace'])) {
+                $namespace = $plugin['vendor_namespace'];
+            }
+            $config = isset($plugin['config']) ? $plugin['config'] : array();
+        } else {
+            continue;
+        }
+    } else {
+        continue;
+    }
+
+    $class = empty($namespace) ? $class_name : $namespace . '\\' . $class_name;
+
+    if (class_exists($class)) {
+        $plugin_list->push(new $class($config));
+    }
+}
+
+$cli = new \clicomposer\Cli($plugin_list);
+
+$cli->addFlag(array('help', 'h'), '查看帮助信息')
+    ->addFlag(array('version', 'v'), '查看版本信息');
+
+$target_cli = $cli->getTarget();
+
+//不匹配任何插件命令，则显示帮助菜单
+if ($target_cli === 'version') {
+    $composer_file   = __DIR__ . '/../composer.json';
+    $composer_config = array();
+    if (file_exists($composer_file)) {
+        $composer_config_str = file_get_contents($composer_file);
+        $composer_config     = json_decode($composer_config_str, true) ?: array();
+    }
+    $version = isset($composer_config['version']) ? $composer_config['version'] : '0.1.0';
+    die('mls: ' . $version . PHP_EOL . PHP_EOL);
+} elseif (empty($target_cli) || $target_cli === 'help') {
+    die($cli->getHelpScreen());
+}
+
+
+$cli->trigger();
+
+
+
+
+
+

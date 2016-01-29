@@ -1,0 +1,12 @@
+{
+    "plugin_vendor_namespace": "cliplugin",
+    "plugins": {
+        "0": {
+            "name": "plugin",
+            "config": {
+                "type": "svn",
+                "repository": "http:\/\/svn.meilishuo.com\/repos\/shop-backend\/trunk\/tools\/mls_cli_plugins"
+            }
+        }
+    }
+}

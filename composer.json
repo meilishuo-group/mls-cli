@@ -1,15 +1,14 @@
 {
     "name": "jintanlu/mls-cli",
     "description": "mls command line toolkit",
-    "version": "0.2.0",
-    "license": "GPL2",
+    "license": "MIT",
     "authors": [
         {
             "name": "LuJintan",
             "email": "yingxuetan@163.com"
         }
     ],
-    "homepage": "https://github.com/lujintan/cli-composer",
+    "homepage": "https://github.com/meilishuo-group/mls-cli",
     "require": {
         "jintanlu/cli-composer": "0.3.0"
     },

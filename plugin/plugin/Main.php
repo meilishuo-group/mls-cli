@@ -55,8 +55,8 @@ class Main extends PluginClass
         $this->plugin_folder     = __DIR__ . '/..';
         $config_str              = file_get_contents(CLI_CONFIG_FILE);
         $this->cli_config        = json_decode($config_str, true) ?: array();
-        $flag_json_encode        = !empty(JSON_UNESCAPED_UNICODE) && !empty(JSON_PRETTY_PRINT) ?
-            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT : 0;
+        $flag_json_encode        = defined('JSON_UNESCAPED_UNICODE') && defined('JSON_PRETTY_PRINT') ?
+            (JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : 0;
 
         if (isset($arguments['install']) || isset($arguments['update'])) {
             $flag_install = isset($arguments['install']);
